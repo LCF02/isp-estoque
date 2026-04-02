@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <title>Recuperar Senha</title>
+</head>
+<body>
+    <main class="container">
+        <form id="formRecuperar">
+            <h1>Recuperar Senha</h1>
+
+            <div class="input-box">
+                <input id="email" placeholder="Digite seu email" type="email" required>
+            </div>
+
+            <button type="submit" class="login">Enviar link</button>
+        </form>
+    </main>
+
+<script>
+document.getElementById("formRecuperar").addEventListener("submit", async function(e){
+    e.preventDefault();
+
+    const email = document.getElementById("email").value;
+
+    const response = await fetch("http://127.0.0.1:8000/esqueci-senha", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            email: email
+        })
+    });
+
+    const data = await response.json();
+
+    if(data.erro){
+        alert(data.erro);
+    }else{
+        alert("Link enviado para seu email");
+    }
+});
+</script>
+
+</body>
+</html>

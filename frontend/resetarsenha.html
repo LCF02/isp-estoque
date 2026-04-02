@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="../css/style.css">
+    <title>Redefinir Senha</title>
+</head>
+<body>
+    <main class="container">
+        <form id="formReset">
+            <h1>Nova Senha</h1>
+
+            <div class="input-box">
+                <input id="senha" placeholder="Nova senha" type="password" required>
+                <i class='bx bx-lock-alt'></i>
+            </div>
+
+            <div class="input-box">
+                <input id="confirmar" placeholder="Confirmar senha" type="password" required>
+                <i class='bx bx-lock'></i>
+            </div>
+
+            <button type="submit" class="login">Salvar nova senha</button>
+
+            <div class="register-link">
+                <p>Lembrou? <a href="login.html">Voltar ao login</a></p>
+            </div>
+        </form>
+    </main>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const token = params.get("token");
+
+if(!token){
+    alert("Token inválido ou ausente");
+}
+
+document.getElementById("formReset").addEventListener("submit", async function(e){
+    e.preventDefault();
+
+    const senha = document.getElementById("senha").value;
+    const confirmar = document.getElementById("confirmar").value;
+
+    if(senha !== confirmar){
+        alert("As senhas não coincidem");
+        return;
+    }
+
+    if(!token){
+        alert("Token inválido");
+        return;
+    }
+
+    const response = await fetch("http://127.0.0.1:8000/resetar-senha", {
+        method: "POST",
+        headers: {
+            "Content-Type":"application/json"
+        },
+        body: JSON.stringify({
+            token: token,
+            senha: senha
+        })
+    });
+
+    const data = await response.json();
+
+    if(data.erro){
+        alert(data.erro);
+    }else{
+        alert("Senha alterada com sucesso!");
+        window.location.href = "login.html";
+    }
+});
+</script>
+
+</body>
+</html>

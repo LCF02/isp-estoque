@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'rel='stylesheet'>
+    <link rel="stylesheet" href="../css/style.css">
+    <title>Bdnet Login</title>
+</head>
+<body>
+    <main class="container">
+        <form id="formLogin">
+            <h1>BDNET LOGIN</h1>
+
+            <div class="input-box">
+                <input id="email" placeholder="Usuário ou Email" type="text" required>
+                <i class='bx bx-user'></i>
+            </div>
+
+            <div class="input-box">
+                <input id="senha" placeholder="Senha" type="password" required>
+                <i class='bx bx-lock-alt'></i>
+            </div>
+
+            <div class="remember-forgot">
+                <label>
+                    <input type="checkbox">
+                    Lembrar senha
+                </label>
+                <a href="esquecisenha.html">Esqueci minha senha</a>
+            </div>
+
+            <button type="submit" class="login">Login</button>
+
+            <div class="register-link">
+                <p>Não tem uma conta? <a href="cadastro.html">Cadastre-se</a></p>
+            </div>
+        </form>
+    </main>
+
+<script>
+document.getElementById("formLogin").addEventListener("submit", async function(e){
+    e.preventDefault();
+
+    const email = document.getElementById("email").value;
+    const senha = document.getElementById("senha").value;
+
+    try{
+        const response = await fetch("http://127.0.0.1:8000/login", {
+            method: "POST",
+            headers:{
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: email,
+                senha: senha
+            })
+        });
+
+        const data = await response.json();
+
+        if(data.msg){
+            alert("Login realizado com sucesso!");
+            window.location.href = "dashboard.html";
+        }else{
+            alert(data.erro || "Erro ao fazer login");
+        }
+
+    }catch(error){
+        alert("Erro ao conectar com servidor");
+        console.error(error);
+    }
+});
+</script>
+
+</body>
+</html>
